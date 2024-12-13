@@ -14,6 +14,9 @@ https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 5. The PrettyLinks Manager icon will appear in your Chrome toolbar
 
 ## Initial Setup
+
+https://github.com/user-attachments/assets/57ae2a77-6b7f-4304-96d9-587db83ac043
+
 1. Click the PrettyLinks Manager icon in your Chrome toolbar
 2. You'll be automatically redirected to the options page on the first install
 3. Enter your WordPress site details:
@@ -23,6 +26,8 @@ https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 5. Click "Save Settings" to store your configuration
 
 ## Features
+
+![2024-12-12_21-05-14](https://github.com/user-attachments/assets/2eb3eb21-1a93-4380-8a5c-86338ea06525)
 
 ### Viewing Links
 - View all your PrettyLinks in a paginated list
