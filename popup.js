@@ -204,41 +204,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Add the insertLink function
     async function insertLink(url) {
-    try {
-        // Get the active tab
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (!tab) {
-            throw new Error('No active tab found');
+        try {
+            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+            if (!tab) {
+                throw new Error('No active tab found');
+            }
+    
+            // First check if we're in Google Docs
+            if (tab.url.includes('docs.google.com')) {
+                // Just copy to clipboard for Google Docs
+                await navigator.clipboard.writeText(url);
+                showStatus('Link copied. Press Ctrl+V (or Cmd+V) to paste in Google Docs', false, 5000);
+                return;
+            }
+    
+            // For all other sites, proceed with normal insertion
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: (linkUrl) => {
+                    const activeElement = document.activeElement;
+                    
+                    // Handle different types of editors
+                    if (activeElement.tagName === 'IFRAME') {
+                        // Handle WordPress Gutenberg
+                        const selection = document.getSelection();
+                        const range = selection.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(document.createTextNode(linkUrl));
+                    } 
+                    // Handle standard text inputs
+                    else if (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') {
+                        const start = activeElement.selectionStart;
+                        const end = activeElement.selectionEnd;
+                        const value = activeElement.value;
+                        activeElement.value = value.substring(0, start) + linkUrl + value.substring(end);
+                        activeElement.selectionStart = activeElement.selectionEnd = start + linkUrl.length;
+                    } 
+                    // Handle contenteditable elements
+                    else if (activeElement.getAttribute('contenteditable') === 'true' || 
+                             activeElement.closest('[contenteditable="true"]')) {
+                        const selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            const range = selection.getRangeAt(0);
+                            range.deleteContents();
+                            range.insertNode(document.createTextNode(linkUrl));
+                        }
+                    }
+                },
+                args: [url]
+            });
+    
+            if (!tab.url.includes('docs.google.com')) {
+                showStatus('Link inserted successfully!');
+            }
+    
+        } catch (error) {
+            console.error('Insert error:', error);
+            showStatus('Failed to insert link. Try copying and pasting manually.', true);
         }
-
-        // Execute the script in the active tab
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: (linkUrl) => {
-                const activeElement = document.activeElement;
-                
-                // Handle different types of editable elements
-                if (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') {
-                    const start = activeElement.selectionStart;
-                    const end = activeElement.selectionEnd;
-                    const value = activeElement.value;
-                    activeElement.value = value.substring(0, start) + linkUrl + value.substring(end);
-                    activeElement.selectionStart = activeElement.selectionEnd = start + linkUrl.length;
-                } else if (activeElement.getAttribute('contenteditable') === 'true') {
-                    const selection = window.getSelection();
-                    const range = selection.getRangeAt(0);
-                    range.deleteContents();
-                    range.insertNode(document.createTextNode(linkUrl));
-                }
-            },
-            args: [url]
-        });
-        showStatus('Link inserted successfully!');
-    } catch (error) {
-        console.error('Insert error:', error);
-        showStatus('Failed to insert link: ' + error.message, true);
     }
-}
+    
+    // Update showStatus to accept a duration parameter
+    function showStatus(message, isError = false, duration = 3000) {
+        const status = document.getElementById('status');
+        status.textContent = message;
+        status.className = `status ${isError ? 'error' : 'success'}`;
+        status.style.display = 'block';
+        setTimeout(() => status.style.display = 'none', duration);
+    }
+
     // Handle edit form submission
     document.getElementById('link-form').addEventListener('submit', async (e) => {
         e.preventDefault();
