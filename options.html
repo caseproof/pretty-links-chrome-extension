@@ -3,42 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>PrettyLinks Manager Settings</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body { width: 500px; margin: 20px auto; font-family: system-ui; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 5px; }
-        .status { margin-top: 10px; padding: 10px; display: none; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        body {
+            width: 800px;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <img src="images/logo.png" alt="PrettyLinks" class="logo" width="300" height="49">
     </header>
-    <h1>Manager Settings</h1>
+    <h1>PrettyLinks Sites Manager</h1>
     <form id="settings-form">
-        <div class="form-group">
-            <label for="baseUrl">WordPress Site URL</label>
-            <input type="url" id="baseUrl" required
-                   placeholder="https://your-site.com">
-        </div>
-
-        <div class="form-group">
-            <label for="apiKey">PrettyLinks API Key</label>
-            <input type="text" id="apiKey" required
-                   placeholder="Enter your PrettyLinks API key">
-            <small>Found in PrettyLinks → Developer Tools</small>
-        </div>
-
-        <button type="button" id="test">Test Connection</button>
-        <button type="submit">Save Settings</button>
+        <div id="sites-container"></div>
+        <button type="button" class="add-site" id="add-site">Add New Site</button>
+        <button type="submit" class="save-settings">Save All Settings</button>
     </form>
     <div id="status" class="status"></div>
-    <footer class="footer">
-        <p>Copyright © 2024 MemberPress, LLC. All rights reserved.</p>
-    </footer>
+    <template id="site-template">
+        <div class="site-container">
+            <div class="site-header">
+                <h3>Site Configuration</h3>
+                <button type="button" class="remove-site">Remove Site</button>
+            </div>
+            <div class="form-group">
+                <label>WordPress Site URL</label>
+                <input type="url" class="site-url" required
+                       placeholder="https://your-site.com">
+            </div>
+            <div class="form-group">
+                <label>PrettyLinks API Key</label>
+                <input type="text" class="api-key" required
+                       placeholder="Enter your PrettyLinks API key">
+                <small>Found in PrettyLinks → Developer Tools</small>
+            </div>
+            <button type="button" class="test-connection">Test Connection</button>
+        </div>
+    </template>
     <script src="options.js"></script>
 </body>
 </html>
