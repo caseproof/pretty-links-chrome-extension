@@ -23,21 +23,21 @@
             <form id="create-form">
                 <div class="form-group">
                     <label for="create-site">WordPress Site:</label>
-                    <select id="create-site" required>
+                    <select id="create-site" name="site">
                         <option value="">Select a site</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="target-url">Target URL:</label>
-                    <input type="url" id="target-url" required>
+                    <input type="url" id="target-url" name="target_url" required>
                 </div>
                 <div class="form-group">
                     <label for="slug">Slug:</label>
-                    <input type="text" id="slug" required>
+                    <input type="text" id="slug" name="slug" required>
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input type="text" id="title">
+                    <input type="text" id="title" name="title">
                 </div>
                 <button type="submit">Create PrettyLink</button>
             </form>
@@ -46,7 +46,7 @@
         <div id="status" class="status"></div>
     </div>
     <footer class="footer">
-        <p>Copyright © 2025 PrettyLinks, LLC. All rights reserved.</p>
+        <p>Copyright © 2024 PrettyLinks, LLC. All rights reserved.</p>
     </footer>
     <script src="popup.js"></script>
 </body>

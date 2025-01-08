@@ -3,14 +3,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const createSiteSelector = document.getElementById('create-site');
     const sitesData = new Map(); // Store site-specific data
     const perPage = 10;
+    let editingLinkId = null;
 
     // Get settings from storage
     async function getSettings() {
-        const activeHeader = document.querySelector('.accordion-header.active');
-        const selectedSite = activeHeader ? sitesData.get(activeHeader.dataset.siteId) : null;
+        const currentSite = sitesData.get('current');
+        if (!currentSite) {
+            const activeHeader = document.querySelector('.accordion-header.active');
+            return {
+                baseUrl: activeHeader ? sitesData.get(activeHeader.dataset.siteId)?.url || '' : '',
+                apiKey: activeHeader ? sitesData.get(activeHeader.dataset.siteId)?.apiKey || '' : ''
+            };
+        }
         return {
-            baseUrl: selectedSite?.url || '',
-            apiKey: selectedSite?.apiKey || ''
+            baseUrl: currentSite.url,
+            apiKey: currentSite.apiKey
         };
     }
 
@@ -177,7 +184,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // API request helper
     async function apiRequest(endpoint, options = {}) {
         const settings = await getSettings();
-        console.log('API Request settings:', settings);
 
         if (!settings.baseUrl || !settings.apiKey) {
             throw new Error('Please configure the extension settings first');
@@ -185,7 +191,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const baseUrl = settings.baseUrl.replace(/\/$/, '');
         const url = `${baseUrl}/wp-json/pl/v1/${endpoint}`;
-        console.log('Making API request to:', url);
 
         const queryParams = options.params ? '?' + new URLSearchParams(options.params).toString() : '';
         
@@ -255,31 +260,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('create-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const siteValue = document.getElementById('create-site').value;
-        if (!siteValue) {
-            showStatus('Please select a site', true);
-            return;
-        }
-        
-        const site = JSON.parse(siteValue);
-        const activeHeader = document.querySelector('.accordion-header.active');
-        const siteId = activeHeader?.dataset.siteId;
-        sitesData.set(siteId, { ...sitesData.get(siteId), ...site });
+        const form = e.target;
+        const submitButton = e.target.querySelector('button[type="submit"]');
 
         try {
+            // Prepare form data
             const formData = {
-                target_url: document.getElementById('target-url').value,
-                slug: document.getElementById('slug').value,
-                title: document.getElementById('title').value
+                target_url: form.target_url.value,
+                slug: form.slug.value,
+                title: form.title.value || ''
             };
 
-            await apiRequest('links', {
-                method: 'POST',
+            if (editingLinkId) {
+                // Use the site from the original link data
+                const activeHeader = document.querySelector('.accordion-header.active');
+                const siteData = sitesData.get(activeHeader.dataset.siteId);
+                sitesData.set('current', siteData);
+            } else {
+                // For new links, validate and get site from selector
+                const siteValue = document.getElementById('create-site').value;
+                if (!siteValue) {
+                    showStatus('Please select a site', true);
+                    return;
+                }
+                const site = JSON.parse(siteValue);
+                sitesData.set('current', site);
+            }
+
+            const endpoint = editingLinkId ? `links/${editingLinkId}` : 'links';
+            const method = editingLinkId ? 'PUT' : 'POST';
+            
+            await apiRequest(endpoint, {
+                method,
                 body: JSON.stringify(formData)
             });
 
-            showStatus('PrettyLink created successfully!');
+            showStatus(`PrettyLink ${editingLinkId ? 'updated' : 'created'} successfully!`);
             e.target.reset();
+            editingLinkId = null;
+            window.currentLinkData = null;
+            submitButton.textContent = 'Create PrettyLink';
             
             // Refresh the active site's links
             const activeHeader = document.querySelector('.accordion-header.active');
@@ -287,7 +307,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 loadLinks(activeHeader.dataset.siteId);
             }
         } catch (error) {
-            showStatus('Failed to create PrettyLink: ' + error.message, true);
+            showStatus(`Failed to ${editingLinkId ? 'update' : 'create'} PrettyLink: ${error.message}`, true);
         }
     });
 
@@ -310,8 +330,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function editLink(id) {
         try {
             const { data } = await apiRequest(`links/${id}`);
-            // Switch to create tab and populate form
+            
+            editingLinkId = id;
+            window.currentLinkData = data;
+
+            // Switch to create tab
             document.querySelector('[data-tab="create-tab"]').click();
+            
+            // Update submit button text
+            const submitButton = document.getElementById('create-form').querySelector('button[type="submit"]');
+            submitButton.textContent = 'Update PrettyLink';
+            
+            // Populate form fields
             document.getElementById('target-url').value = data.target_url;
             document.getElementById('slug').value = data.slug;
             document.getElementById('title').value = data.title;
@@ -319,6 +349,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             showStatus('Failed to load link: ' + error.message, true);
         }
     }
+
+    // Reset create form when switching to create tab
+    document.querySelector('[data-tab="create-tab"]').addEventListener('click', () => {
+        const siteSelect = document.getElementById('create-site');
+        if (!editingLinkId) {
+            siteSelect.value = ''; // Only reset site selection if not editing
+        }
+        const submitButton = document.getElementById('create-form').querySelector('button[type="submit"]');
+        submitButton.textContent = 'Create PrettyLink';
+        if (!editingLinkId) {
+            document.getElementById('create-form').reset();
+        }
+    });
 
     async function insertLink(url, text) {
         try {
