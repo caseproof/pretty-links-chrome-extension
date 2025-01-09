@@ -14,7 +14,12 @@ PrettyLinks Manager is a Chrome extension that enables users to manage WordPress
 ## Installation
 
 ### Manual Installation (Developer Mode)
-1. Install in Chrome:
+1. Download the extension:
+   - Clone or download the repository from GitHub
+   - Run `npm install` to install dependencies
+   - Run `npm run build` to build the extension
+
+2. Install in Chrome:
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode" in the top right
    - Click "Load unpacked"
