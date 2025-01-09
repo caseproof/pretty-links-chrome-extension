@@ -1,3 +1,4 @@
+// Chrome storage service
 import { getSites } from './storage.js';
 
 export async function initializeSites() {
@@ -27,3 +28,4 @@ export function getCurrentSite(sitesData) {
 
 export function getSiteById(sitesData, siteId) {
     return sitesData.get(siteId);
+}
