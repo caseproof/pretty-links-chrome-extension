@@ -366,13 +366,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function insertLink(url, text) {
         try {
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-            await chrome.tabs.sendMessage(tab.id, {
-                type: 'insertLink',
-                data: { url, text }
+            if (!tab?.id) {
+                throw new Error('No active tab found');
+            }
+
+            // Check if we can access the tab
+            try {
+                await chrome.scripting.executeScript({ 
+                    target: { tabId: tab.id }, 
+                    func: () => true 
+                });
+            } catch (error) {
+                throw new Error('Cannot access this page - try clicking into an editor on a regular web page');
+            }
+
+            // Inject content script if needed and send message
+            const response = await new Promise((resolve) => {
+                chrome.tabs.sendMessage(tab.id, { type: 'insertLink', data: { url, text } }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        // Content script not loaded, inject it
+                        chrome.scripting.executeScript({
+                            target: { tabId: tab.id },
+                            files: ['content.js']
+                        }).then(() => {
+                            // Try sending message again after injection
+                            setTimeout(() => {
+                                chrome.tabs.sendMessage(tab.id, { type: 'insertLink', data: { url, text } }, resolve);
+                            }, 100);
+                        }).catch((error) => {
+                            resolve({ success: false, error: error.message });
+                        });
+                    } else {
+                        resolve(response);
+                    }
+                });
             });
+
+            if (!response?.success) {
+                throw new Error(response?.error || 'Failed to insert link');
+            }
+
             showStatus('Link inserted successfully!');
         } catch (error) {
-            showStatus('Failed to insert link: ' + error.message, true);
+            console.error('[PrettyLinks] Link insertion failed:', error);
+            showStatus(error.message || 'Failed to insert link. Please make sure you are clicked into an editor.', true);
         }
     }
 

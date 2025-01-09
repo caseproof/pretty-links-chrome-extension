@@ -12,8 +12,9 @@ PrettyLinks Manager is a Chrome extension that enables users to manage WordPress
 ### WordPress Requirements
 - WordPress 5.0+
 - PrettyLinks Pro plugin installed and activated
+- - PrettyLinks Developer Tools plugin installed and activated
 - REST API enabled
-- Valid API key configured
+- Valid API key configured in an admin account
 
 ## Architecture
 
