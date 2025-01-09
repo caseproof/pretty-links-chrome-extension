@@ -360,22 +360,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error('No active tab found');
             }
 
-            // Try to inject content script first
+            // First try to send message to see if content script is already loaded
             try {
-                await chrome.scripting.executeScript({
-                    target: { tabId: tab.id },
-                   files: ['content/content.js']
+                const response = await chrome.tabs.sendMessage(tab.id, {
+                    type: 'insertLink',
+                    data: { url, text }
                 });
+                if (response?.success) {
+                    showStatus('Link inserted successfully!');
+                    return;
+                }
             } catch (error) {
-                console.log('Content script already loaded or injection failed:', error);
+                // Content script not loaded, inject it
+                try {
+                    await chrome.scripting.executeScript({
+                        target: { tabId: tab.id },
+                        files: ['content/content.js']
+                    });
+                    
+                    // Wait a moment for the script to initialize
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // Try sending the message again
+                    const response = await chrome.tabs.sendMessage(tab.id, {
+                        type: 'insertLink',
+                        data: { url, text }
+                    });
+                    
+                    if (response?.success) {
+                        showStatus('Link inserted successfully!');
+                        return;
+                    }
+                } catch (injectError) {
+                    throw new Error('Failed to inject content script');
+                }
             }
 
-            // Then try to send the message
-            await chrome.tabs.sendMessage(tab.id, {
-                type: 'insertLink',
-                data: { url, text }
-            });
-            showStatus('Link inserted successfully!');
+            throw new Error('Failed to insert link');
         } catch (error) {
             showStatus('Failed to insert link. Please make sure you are clicked into an editor.', true);
         }
