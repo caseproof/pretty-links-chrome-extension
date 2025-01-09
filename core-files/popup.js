@@ -317,17 +317,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             await navigator.clipboard.writeText(e.target.dataset.url);
             showStatus('URL copied to clipboard!');
         } else if (e.target.classList.contains('edit-btn')) {
-            await editLink(e.target.dataset.id);
+            editingLinkId = await handleEditLink(e.target.dataset.id);
         } else if (e.target.classList.contains('insert-btn')) {
-            await insertLink(e.target.dataset.url, e.target.dataset.text);
+            await handleInsertLink(e.target.dataset.url, e.target.dataset.text);
         } else if (e.target.classList.contains('delete-btn')) {
             if (confirm('Are you sure you want to delete this link?')) {
-                await deleteLink(e.target.dataset.id);
+                await handleDeleteLink(e.target.dataset.id);
             }
         }
     });
 
-    async function editLink(id) {
+    async function handleEditLink(id) {
         try {
             const { data } = await apiRequest(`links/${id}`);
             
@@ -345,75 +345,64 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('target-url').value = data.target_url;
             document.getElementById('slug').value = data.slug;
             document.getElementById('title').value = data.title;
+            
+            return id;
         } catch (error) {
             showStatus('Failed to load link: ' + error.message, true);
+            return null;
         }
     }
 
-    // Reset create form when switching to create tab
-    document.querySelector('[data-tab="create-tab"]').addEventListener('click', () => {
-        const siteSelect = document.getElementById('create-site');
-        if (!editingLinkId) {
-            siteSelect.value = ''; // Only reset site selection if not editing
-        }
-        const submitButton = document.getElementById('create-form').querySelector('button[type="submit"]');
-        submitButton.textContent = 'Create PrettyLink';
-        if (!editingLinkId) {
-            document.getElementById('create-form').reset();
-        }
-    });
-
-    async function insertLink(url, text) {
+    async function handleInsertLink(url, text) {
         try {
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             if (!tab?.id) {
                 throw new Error('No active tab found');
             }
 
-            // Check if we can access the tab
+            // First try to send message to see if content script is already loaded
             try {
-                await chrome.scripting.executeScript({ 
-                    target: { tabId: tab.id }, 
-                    func: () => true 
+                const response = await chrome.tabs.sendMessage(tab.id, {
+                    type: 'insertLink',
+                    data: { url, text }
                 });
+                if (response?.success) {
+                    showStatus('Link inserted successfully!');
+                    return;
+                }
             } catch (error) {
-                throw new Error('Cannot access this page - try clicking into an editor on a regular web page');
-            }
-
-            // Inject content script if needed and send message
-            const response = await new Promise((resolve) => {
-                chrome.tabs.sendMessage(tab.id, { type: 'insertLink', data: { url, text } }, (response) => {
-                    if (chrome.runtime.lastError) {
-                        // Content script not loaded, inject it
-                        chrome.scripting.executeScript({
-                            target: { tabId: tab.id },
-                            files: ['content.js']
-                        }).then(() => {
-                            // Try sending message again after injection
-                            setTimeout(() => {
-                                chrome.tabs.sendMessage(tab.id, { type: 'insertLink', data: { url, text } }, resolve);
-                            }, 100);
-                        }).catch((error) => {
-                            resolve({ success: false, error: error.message });
-                        });
-                    } else {
-                        resolve(response);
+                // Content script not loaded, inject it
+                try {
+                    await chrome.scripting.executeScript({
+                        target: { tabId: tab.id },
+                        files: ['content/content.js']
+                    });
+                    
+                    // Wait a moment for the script to initialize
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // Try sending the message again
+                    const response = await chrome.tabs.sendMessage(tab.id, {
+                        type: 'insertLink',
+                        data: { url, text }
+                    });
+                    
+                    if (response?.success) {
+                        showStatus('Link inserted successfully!');
+                        return;
                     }
-                });
-            });
-
-            if (!response?.success) {
-                throw new Error(response?.error || 'Failed to insert link');
+                } catch (injectError) {
+                    throw new Error('Failed to inject content script');
+                }
             }
 
-            showStatus('Link inserted successfully!');
+            throw new Error('Failed to insert link');
         } catch (error) {
-            console.error('[PrettyLinks] Link insertion failed:', error);
-            showStatus(error.message || 'Failed to insert link. Please make sure you are clicked into an editor.', true);
+            showStatus('Failed to insert link. Please make sure you are clicked into an editor.', true);
         }
     }
 
-    async function deleteLink(id) {
+    async function handleDeleteLink(id) {
         try {
             await apiRequest(`links/${id}`, { method: 'DELETE' });
             showStatus('Link deleted successfully!');
@@ -430,12 +419,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize the popup
     await initializeSiteSelectors();
-
-    // Listen for extracted links
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.type === 'extractedLinks') {
-            showStatus(`Found ${request.links.length} links on the page`);
-        }
-    });
-
 });

@@ -8,13 +8,18 @@ https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 ## Installation
 
 ### Manual Installation (Developer Mode)
-1. Install in Chrome:
+1. Download and prepare the extension:
+   - Download or clone the repository
+   - Run `npm install` to install dependencies
+   - Run `npm run build` to build the extension
+2. Install in Chrome:
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
    - Click "Load unpacked" and select the `dist` folder
    - The PrettyLinks Manager icon will appear in your toolbar
 
-
+### Chrome Web Store
+Coming soon! The extension will be available for easy one-click installation.
 
 ### Chrome Web Store
 Coming soon! The extension will be available for easy one-click installation.
@@ -31,8 +36,7 @@ Coming soon! The extension will be available for easy one-click installation.
 
 ## Features
 
-![PrettyLinks Chrome Extension Screenshot](https://github.com/user-attachments/assets/b56e6853-53f1-4bf3-86cb-9a5676e71ace)
-
+![2024-12-12_21-05-14](https://github.com/user-attachments/assets/2eb3eb21-1a93-4380-8a5c-86338ea06525)
 
 ### Viewing Links
 - View all your PrettyLinks in a paginated list
@@ -114,7 +118,7 @@ The extension can be updated by:
 We welcome contributions! Please read our contributing guidelines before submitting pull requests.
 
 ## License
-Copyright © 2025 PrettyLinks, LLC. All rights reserved.
+Copyright © 2024 PrettyLinks, LLC. All rights reserved.
 
 ## Support
 For issues and feature requests, please use the GitHub issue tracker.
