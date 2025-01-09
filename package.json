@@ -5,19 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "build": "rm -rf dist && vite build && cp core-files/manifest.json dist/ && cp -r core-files/icons dist/ && cp -r core-files/images dist/",
-    "preview": "vite preview",
+    "build": "vite build",
     "export": "node create-zip.js --experimental-modules"
   },
   "dependencies": {
-    "webextension-polyfill": "^0.10.0",
     "archiver": "^5.3.1"
   },
   "devDependencies": {
-    "vite": "^5.4.2",
-    "@types/node": "^20.11.24",
-    "autoprefixer": "^10.4.18",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1"
+    "vite": "^5.4.2"
   }
 }
