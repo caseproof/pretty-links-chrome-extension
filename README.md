@@ -35,8 +35,6 @@ Coming soon! The extension will be available for easy one-click installation.
 
 ## Features
 
-![PrettyLinks Chrome Extension Screenshot](https://github.com/user-attachments/assets/c3a510d1-c1dc-44f0-ab92-9d3448344050)
-
 ### Viewing Links
 - View all your PrettyLinks in a paginated list
 - Each link displays:
@@ -63,6 +61,12 @@ Coming soon! The extension will be available for easy one-click installation.
 1. Click the "Delete" button on any link
 2. Confirm the deletion
 3. Link will be removed from your PrettyLinks
+
+## Screenshots
+
+![PrettyLinks Chrome Extension Screenshot](https://github.com/user-attachments/assets/c3a510d1-c1dc-44f0-ab92-9d3448344050)
+![Accordion menu for multiple sites](https://github.com/user-attachments/assets/6a92ee1a-6ee1-4fdd-870b-66eea8ff9380)
+![Extension options page](https://github.com/user-attachments/assets/f6225c08-96e3-411b-b5f4-5b1db0baa450)
 
 ## Troubleshooting
 
