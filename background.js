@@ -1,6 +1,4 @@
-// Description: Background script for the PrettyLinks Manager Extension
-// Version: 1.1
-// Date: 2025-01-08
+// Background script for the PrettyLinks Manager Extension
 chrome.runtime.onInstalled.addListener(() => {
     console.log("PrettyLinks Manager Extension Installed");
     chrome.storage.sync.get({
