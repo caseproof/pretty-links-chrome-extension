@@ -20,9 +20,6 @@ https://github.com/user-attachments/assets/532744fd-c057-48fb-89e5-606e53558e31
 ### Chrome Web Store
 Coming soon! The extension will be available for easy one-click installation.
 
-### Chrome Web Store
-Coming soon! The extension will be available for easy one-click installation.
-
 ## Initial Setup
 
 1. Click the PrettyLinks Manager icon in your Chrome toolbar
