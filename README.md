@@ -11,11 +11,10 @@ https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 1. Download and prepare the extension:
    - Download or clone the repository
    - Run `npm install` to install dependencies
-   - Run `npm run build` to build the extension
 2. Install in Chrome:
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
-   - Click "Load unpacked" and select the `dist` folder
+   - Click "Load unpacked" and select the `core-files` folder
    - The PrettyLinks Manager icon will appear in your toolbar
 
 ### Chrome Web Store
@@ -110,8 +109,8 @@ Coming soon! The extension will be available for easy one-click installation.
 ## Updates
 The extension can be updated by:
 1. Downloading the latest version
-2. Running `npm install` and `npm run build`
-3. Updating the extension in Chrome using "Load unpacked"
+2. Running `npm install` to update dependencies
+3. Updating the extension in Chrome by clicking "Load unpacked" and selecting the `core-files` folder
 4. Your settings will be preserved between updates
 
 ## Contributing

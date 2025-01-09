@@ -14,16 +14,15 @@ PrettyLinks Manager is a Chrome extension that enables users to manage WordPress
 ## Installation
 
 ### Manual Installation (Developer Mode)
-1. Download the extension:
+1. Prepare the extension:
    - Clone or download the repository from GitHub
    - Run `npm install` to install dependencies
-   - Run `npm run build` to build the extension
 
 2. Install in Chrome:
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode" in the top right
    - Click "Load unpacked"
-   - Select the `dist` folder from the built extension
+   - Select the `core-files` folder
 
 ### Chrome Web Store Installation
 - Coming soon! The extension will be available in the Chrome Web Store for easy one-click installation.
@@ -99,6 +98,8 @@ PrettyLinks Manager is a Chrome extension that enables users to manage WordPress
 ## Technical Details
 
 ### Architecture
+The extension uses a modular architecture with direct source files:
+
 1. **Background Service Worker** (`background.js`)
    - Handles extension initialization
    - Manages storage operations
@@ -123,10 +124,10 @@ PrettyLinks Manager is a Chrome extension that enables users to manage WordPress
    - Connection testing
 
 ### Build System
-- Vite for modern build tooling
-- Separate content script bundling
-- Source maps for debugging
-- Development mode with hot reload
+- Direct source file usage without build step
+- Modular JavaScript architecture
+- Clean separation of concerns
+- Easy development and debugging
 
 ## Contributing
 Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
