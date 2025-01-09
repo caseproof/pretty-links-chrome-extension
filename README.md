@@ -1,21 +1,25 @@
-# PrettyLinks Chrome Extension
+# PrettyLinks Manager Chrome Extension (v1.1)
 
 ## Overview
-The PrettyLinks Manager Chrome Extension is designed to help you manage your WordPress PrettyLinks directly from your browser. It provides a convenient interface for viewing, searching, creating, editing, and managing your PrettyLinks without needing to access the WordPress admin panel.
+The PrettyLinks Manager Chrome Extension (v1.1) is designed to help you manage your WordPress PrettyLinks directly from your browser. It provides a convenient interface for viewing, searching, creating, editing, and managing your PrettyLinks without needing to access the WordPress admin panel.
 
 https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 
-
 ## Installation
-1. Download the extension files
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the extension directory
-5. The PrettyLinks Manager icon will appear in your Chrome toolbar
+
+### Manual Installation (Developer Mode)
+1. Install in Chrome:
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" in the top right corner
+   - Click "Load unpacked" and select the `dist` folder
+   - The PrettyLinks Manager icon will appear in your toolbar
+
+
+
+### Chrome Web Store
+Coming soon! The extension will be available for easy one-click installation.
 
 ## Initial Setup
-
-https://github.com/user-attachments/assets/57ae2a77-6b7f-4304-96d9-587db83ac043
 
 1. Click the PrettyLinks Manager icon in your Chrome toolbar
 2. You'll be automatically redirected to the options page on the first install
@@ -44,74 +48,72 @@ https://github.com/user-attachments/assets/57ae2a77-6b7f-4304-96d9-587db83ac043
 
 ### Managing Links
 
-#### Creating New Links
-1. Click "+ Add Link" at the top of the popup
-2. Fill in the required fields:
-   - Title
-   - Slug
-   - Target URL
-3. Click "Add Link" to save
-
-#### Editing Links
-1. Click the "Edit" button on any link
-2. Modify the desired fields
-3. Click "Save Changes" to update
-
-#### Copying Links
-- Click the "Copy" button to copy the short URL to your clipboard
-- A success message will confirm the copy
-
 #### Inserting Links
 1. Focus on any text input field on a webpage
 2. Click the "Insert" button on the desired link
-3. The short URL will be inserted at the cursor position
+3. The short URL will be inserted at the cursor position*
+
+*Note: For Google Docs, please use the "Copy" button and paste manually as direct insertion is currently not supported.
 
 #### Deleting Links
 1. Click the "Delete" button on any link
-2. Confirm the deletion in the popup
-3. The link will be permanently removed
-
-## Pagination
-- Links are displayed 10 per page
-- Use the Previous/Next buttons to navigate between pages
-- Current page and total pages are shown
+2. Confirm the deletion
+3. Link will be removed from your PrettyLinks
 
 ## Troubleshooting
 
 ### Common Issues
-1. Connection Failed
+1. Google Docs Integration
+   - Currently, direct link insertion in Google Docs is not supported
+   - Use the "Copy" button and paste manually instead
+
+2. Connection Failed
    - Verify your WordPress site URL is correct
    - Check that your API Key is valid
    - Ensure your WordPress site is accessible
 
-2. Insert Not Working
+3. Insert Not Working
    - Make sure you're focused on an editable text field
    - Some websites may restrict script injection
+   - For Google Docs, use copy/paste method
 
-3. Authorization Error
+4. Authorization Error
    - Verify your API Key in the options page
    - Check PrettyLinks plugin permissions
 
-### Support
-If you encounter any issues:
-1. Check that PrettyLinks is properly installed and activated on your WordPress site
-2. Verify your API Key in PrettyLinks → Developer Tools
-3. Contact MemberPress support for additional assistance
+## Supported Platforms
+
+### Editors
+- WordPress Gutenberg ✅
+- WordPress Classic Editor ✅
+- Gmail ✅
+- Regular contenteditable elements ✅
+- Google Docs (Copy/paste only) ⚠️
 
 ## Technical Requirements
 - Google Chrome browser
 - WordPress website with PrettyLinks plugin installed
+- PrettyLinks Developer Tools plugin activated
 - Valid PrettyLinks API Key
 - HTTPS for production sites (recommended)
 
-## Security Notes
-- Your API Key is stored securely in Chrome's storage sync
-- All communication with your WordPress site uses secure API endpoints
-- No sensitive data is stored locally
+## Privacy & Security
+- API keys are encrypted locally
+- No tracking or data collection
+- Open-source codebase for transparency
 
 ## Updates
 The extension can be updated by:
 1. Downloading the latest version
-2. Removing the existing extension
-3. Loading the new version using "Load unpacked"
+2. Running `npm install` and `npm run build`
+3. Updating the extension in Chrome using "Load unpacked"
 4. Your settings will be preserved between updates
+
+## Contributing
+We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+
+## License
+Copyright © 2025 PrettyLinks, LLC. All rights reserved.
+
+## Support
+For issues and feature requests, please use the GitHub issue tracker.
