@@ -35,7 +35,7 @@ Coming soon! The extension will be available for easy one-click installation.
 
 ## Features
 
-![2024-12-12_21-05-14](https://github.com/user-attachments/assets/2eb3eb21-1a93-4380-8a5c-86338ea06525)
+![PrettyLinks Chrome Extension Screenshot](https://github.com/user-attachments/assets/c3a510d1-c1dc-44f0-ab92-9d3448344050)
 
 ### Viewing Links
 - View all your PrettyLinks in a paginated list
