@@ -3,7 +3,7 @@
 ## Overview
 The PrettyLinks Manager Chrome Extension (v1.1) is designed to help you manage your WordPress PrettyLinks directly from your browser. It provides a convenient interface for viewing, searching, creating, editing, and managing your PrettyLinks without needing to access the WordPress admin panel.
 
-https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
+https://github.com/user-attachments/assets/532744fd-c057-48fb-89e5-606e53558e31
 
 ## Installation
 
