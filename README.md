@@ -3,7 +3,7 @@
 ## Overview
 The PrettyLinks Manager Chrome Extension (v1.1) is designed to help you manage your WordPress PrettyLinks directly from your browser. It provides a convenient interface for viewing, searching, creating, editing, and managing your PrettyLinks without needing to access the WordPress admin panel.
 
-https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
+https://github.com/user-attachments/assets/532744fd-c057-48fb-89e5-606e53558e31
 
 ## Installation
 
@@ -20,9 +20,6 @@ https://github.com/user-attachments/assets/fe7863ee-a0b2-400c-b247-89c8415589ca
 ### Chrome Web Store
 Coming soon! The extension will be available for easy one-click installation.
 
-### Chrome Web Store
-Coming soon! The extension will be available for easy one-click installation.
-
 ## Initial Setup
 
 1. Click the PrettyLinks Manager icon in your Chrome toolbar
@@ -34,8 +31,6 @@ Coming soon! The extension will be available for easy one-click installation.
 5. Click "Save Settings" to store your configuration
 
 ## Features
-
-![2024-12-12_21-05-14](https://github.com/user-attachments/assets/2eb3eb21-1a93-4380-8a5c-86338ea06525)
 
 ### Viewing Links
 - View all your PrettyLinks in a paginated list
@@ -63,6 +58,17 @@ Coming soon! The extension will be available for easy one-click installation.
 1. Click the "Delete" button on any link
 2. Confirm the deletion
 3. Link will be removed from your PrettyLinks
+
+## Screenshots
+
+### Link Insertion
+![PrettyLinks Chrome Extension Screenshot](https://github.com/user-attachments/assets/c3a510d1-c1dc-44f0-ab92-9d3448344050)
+
+### Support Multiple Domains
+![Accordion menu for multiple sites](https://github.com/user-attachments/assets/6a92ee1a-6ee1-4fdd-870b-66eea8ff9380)
+
+### Extension Settings Page
+![Extension options page](https://github.com/user-attachments/assets/f6225c08-96e3-411b-b5f4-5b1db0baa450)
 
 ## Troubleshooting
 
